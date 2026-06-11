@@ -18,6 +18,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (hidden) {
             hidden.value = editor.innerHTML;
+
+            console.log(
+                editor.id,
+                editor.innerHTML.length,
+                hidden.value.length
+            );
         }
 
     });
@@ -311,7 +317,15 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('submit', () => {
         document.querySelectorAll('.editor-area').forEach(editor => {
             const hidden = document.getElementById(editor.id + '_input');
-            if (hidden) hidden.value = editor.innerHTML;
+            if (hidden) {
+                hidden.value = editor.innerHTML;
+
+                console.log(
+                    editor.id,
+                    editor.innerHTML.length,
+                    hidden.value.length
+                );
+            }
         });
     });
 
