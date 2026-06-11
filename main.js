@@ -7,6 +7,21 @@ document.addEventListener('DOMContentLoaded', () => {
         editor.setAttribute('data-enable-grammarly', 'false');
     });
 
+    document.addEventListener('input', (e) => {
+
+        const editor = e.target.closest('.editor-area');
+
+        if (!editor) return;
+
+        const hidden =
+            document.getElementById(editor.id + '_input');
+
+        if (hidden) {
+            hidden.value = editor.innerHTML;
+        }
+
+    });
+
     const getEditor = (id) => document.getElementById(id);
 
     const exec = (editor, cmd, value = null) => {
@@ -137,20 +152,20 @@ document.addEventListener('DOMContentLoaded', () => {
         /* IMAGE */
         if (btn.classList.contains('insertImage')) {
 
-    const imageUrl = prompt("Image URL:");
-    if (!imageUrl) return;
+            const imageUrl = prompt("Image URL:");
+            if (!imageUrl) return;
 
-    const alt = prompt("Alt Text:", "") || '';
+            const alt = prompt("Alt Text:", "") || '';
 
-    const title = prompt("Title:", "") || '';
+            const title = prompt("Title:", "") || '';
 
-    const redirectUrl = prompt("Redirect URL (optional):", "") || '';
+            const redirectUrl = prompt("Redirect URL (optional):", "") || '';
 
-    let html = '';
+            let html = '';
 
-    if (redirectUrl) {
+            if (redirectUrl) {
 
-        html = `
+                html = `
         <div class="media-wrapper">
 
             <a href="${redirectUrl}"
@@ -167,9 +182,9 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
         `;
 
-    } else {
+            } else {
 
-        html = `
+                html = `
         <div class="media-wrapper">
 
             <img src="${imageUrl}"
@@ -180,9 +195,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         </div>
         `;
-    }
+            }
 
- exec(editor, 'insertHTML', html);
+            exec(editor, 'insertHTML', html);
         }
 
         /* VIDEO */
@@ -301,6 +316,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.querySelectorAll('.editor-toolbar *').forEach(el => el.tabIndex = -1);
+
+    document.querySelectorAll('.rich-editor')
+        .forEach(container => {
+
+            const id =
+                container.dataset.id ||
+                ('editor_' + Date.now());
+
+            const name =
+                container.dataset.name ||
+                'content';
+
+            const value =
+                container.dataset.value ||
+                '';
+
+            container.innerHTML =
+                buildEditor(id, name, value);
+        });
 });
 
 function buildEditor(id, name, value = '') {
@@ -391,26 +425,3 @@ function buildEditor(id, name, value = '') {
     </div>
     `;
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-
-    document.querySelectorAll('.rich-editor')
-        .forEach(container => {
-
-            const id =
-                container.dataset.id ||
-                ('editor_' + Date.now());
-
-            const name =
-                container.dataset.name ||
-                'content';
-
-            const value =
-                container.dataset.value ||
-                '';
-
-            container.innerHTML =
-                buildEditor(id, name, value);
-        });
-
-});
